@@ -1,3 +1,9 @@
 numpy
 matplotlib
 rebound
+bqplot
+ipympl
+scipy
+voila
+ipywidgets
+batman
