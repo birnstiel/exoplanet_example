@@ -6,4 +6,4 @@ ipympl
 scipy
 voila
 ipywidgets
-batman
+batman-package
