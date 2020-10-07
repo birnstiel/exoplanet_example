@@ -1,0 +1,5 @@
+include Readme.rst
+include LICENSE
+include exoplanet_example/data/*.tbl
+include exoplanet_example/data/*.bin
+include exoplanet_example/notebooks/*.ipynb
