@@ -1,3 +1,6 @@
+import pkg_resources
+import os
+
 import numpy as np
 from scipy.cluster.vq import kmeans2
 
@@ -40,6 +43,34 @@ def get_flux(x, rp, a, ecc, inc, w, fac=None):
     m = batman.TransitModel(params, x, fac=fac)    # initializes model
     flux = m.light_curve(params)          # calculates light curve
     return flux
+
+
+def get_wendelstein1_data():
+    """Returns Wendelstein 1 light curve data.
+
+    Returns
+    -------
+
+    array x: time from transit
+    array y: light curve
+    array dy: uncertainty
+
+    """
+    fname = get_fname('folded_corr_norm_prim_z.tbl')
+
+    data = np.loadtxt(fname)
+    idx = data[:, 0].argsort()
+    data = data[idx, :]
+    x = data[:, 0] - 1
+    y = data[:, 1]
+    dy = data[:, 2]
+
+    return x, y, dy
+
+
+def get_fname(filename):
+    """Returns full path to data file within package."""
+    return pkg_resources.resource_filename(__name__, os.path.join('data', filename))
 
 
 def prune_parameters(logp, p0, N=3, frac=0.25):
