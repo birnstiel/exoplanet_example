@@ -3,8 +3,15 @@ import os
 
 import numpy as np
 from scipy.cluster.vq import kmeans2
+import astropy.constants as c
 
 import batman
+
+R_sun = c.R_sun.cgs.value
+M_sun = c.M_sun.cgs.value
+R_jup = c.R_jup.cgs.value
+M_jup = c.M_jup.cgs.value
+au = c.au.cgs.value
 
 
 def get_flux(x, rp, a, ecc, inc, w, fac=None):
@@ -45,27 +52,35 @@ def get_flux(x, rp, a, ecc, inc, w, fac=None):
     return flux
 
 
-def get_wendelstein1_data():
-    """Returns Wendelstein 1 light curve data.
+class W1b():
+    """Wendelstein 1 b data and properties"""
+    rs = 0.61 * R_sun  # in cgs
+    ms = 0.65 * M_sun  # in cgs
 
-    Returns
-    -------
+    rp = 1.031 * R_jup       # in cgs
+    rprs = rp / rs  # in stellar radii
 
-    array x: time from transit
-    array y: light curve
-    array dy: uncertainty
+    a = 0.0282 * au  # in cgs
+    ars = a / rs
+    e = 0.012
+    i = 86.1
 
-    """
-    fname = get_fname('folded_corr_norm_prim_z.tbl')
+    def get_data(self):
+        """reads Wendelstein 1b light curve data
 
-    data = np.loadtxt(fname)
-    idx = data[:, 0].argsort()
-    data = data[idx, :]
-    x = data[:, 0] - 1
-    y = data[:, 1]
-    dy = data[:, 2]
+        array x: time from transit
+        array y: light curve
+        array dy: uncertainty
+        """
+        fname = get_fname('folded_corr_norm_prim_z.tbl')
 
-    return x, y, dy
+        data = np.loadtxt(fname)
+        idx = data[:, 0].argsort()
+        data = data[idx, :]
+        x = data[:, 0] - 1
+        y = data[:, 1]
+        dy = data[:, 2]
+        return x, y, dy
 
 
 def get_fname(filename):
